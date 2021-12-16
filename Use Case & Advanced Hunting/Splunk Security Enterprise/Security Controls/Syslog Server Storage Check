@@ -1,0 +1,9 @@
+##Syslog Server Storage Check##
+#Alert if the Syslog storage onear 75% of disk capacity#
+(index=linux OR index=_internal ) sourcetype=df mount="/opt/splunk_log" | dedup host mount 
+| eval host=upper(host) 
+| lookup Asset_Syslog_Servers_Details.csv host as host 
+| eval disk_status=if(PercentUsedSpace>75,"Warning","Normal") 
+| stats  list(PercentUsedSpace) as PercentUsedSpace list(disk_status) as disk_status by role host mount network_segment 
+| where disk_status="Warning" | rename host as dest
+
