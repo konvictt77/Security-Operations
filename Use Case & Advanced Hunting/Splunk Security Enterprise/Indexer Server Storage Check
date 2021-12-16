@@ -1,0 +1,10 @@
+##Indexer Server Storage Check##
+#Alert If the Indexer storage on the is near 75% of capacity#
+(index=linux OR index=_internal ) sourcetype=df mount=/mnt/splunkdata1 OR mount=/mnt/splunkdata2
+| dedup host mount 
+| eval host=upper(host) 
+| lookup Splunk_Servers_Details.csv host as host 
+| eval disk_status=if(PercentUsedSpace>75,"Warning","Normal") 
+| stats list(PercentUsedSpace) as PercentUsedSpace list(disk_status) as disk_status by role host mount network_segment 
+| where disk_status="Warning" 
+| rename host as dest
