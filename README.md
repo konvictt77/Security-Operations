@@ -1,0 +1,1 @@
+This repo contains sample queries and possible use cases in monitoring and hunting in Microsoft 365 Defender. This all I gathered through the course of gaining exposure and experience in my Cyber Security career.
